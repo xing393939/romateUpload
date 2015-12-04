@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="upload.css" type="text/css">
+</head>
+<body>
+<div id="body">
+    <div id="wrapper">
+        <div class="file-choose"><a href="javascript: void(0);" class="choose-icon"
+                                    data-action="a.className.choose-icon">⨁</a></div>
+        <div class="uploadList-wrapper">
+            <ul class="uploadList"></ul>
+        </div>
+    </div>
+</div>
+<script src="utils.js"></script>
+<script src="utils.dom.js"></script>
+<script src="service.js"></script>
+<script src="excutionQueen.js"></script>
+<script>
+    this.multiple = true;
+    this.fileChoose = null;
+
+    var filterElemByClass = UTIL.dom.filterElemByClass;
+    var addDomEvent = UTIL.addDomEvent;
+    var removeDomEvent = UTIL.removeDomEvent;
+    var ensureAfterDomRenderer = UTIL.ensureAfterDomRenderer;
+    var removeClass = UTIL.dom.removeClass;
+
+    var str2ab_blobreader = function (str) {
+        var blob;
+        BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
+        if (typeof(BlobBuilder) !== 'undefined') {
+            var bb = new BlobBuilder();
+            bb.append(str);
+            blob = bb.getBlob();
+        } else {
+            blob = new Blob([str]);
+        }
+        var f = new FileReader();
+        f.onload = function (e) {
+            console.log(e.target.result);
+        }
+        f.readAsArrayBuffer(blob);
+    };
+    var readBlob = function (blob) {
+        start = 0;
+        end = 2097152;
+        if (blob.webkitSlice) {
+            chunk = blob.webkitSlice(start, end);
+        } else if (blob.mozSlice) {
+            chunk = blob.mozSlice(start, end);
+        } else {
+            chunk = blob.slice(start, end);
+        }
+        if (blob.webkitSlice) {
+            var buffer = str2ab_blobreader(chunk);
+        } else {
+            console.log(chunk);
+        }
+    }
+
+    var _createUploadInput = function (up) {
+        var fileSelector = document.createElement('input');
+        fileSelector.setAttribute('type', 'file');
+        if (up.multiple) fileSelector.setAttribute('multiple', 'multiple');
+        return fileSelector;
+    };
+    var onChooseFile = function () {
+        var up = this;
+        var fileChoose = _createUploadInput(up);
+        this.fileChoose = fileChoose;
+        addDomEvent(fileChoose, 'change', function () {
+            onChangeFiles.call(up);
+        });
+        if (fileChoose) fileChoose.click();
+    };
+    var onChangeFiles = function () {
+        var fileChoose = this.fileChoose;
+        if (fileChoose) {
+            var files = fileChoose.files;
+            for (var i = 0, l = files.length; i < l; i++) {
+                var file = files[i];
+                readBlob(file);
+            }
+        }
+    };
+    var event = new EventService({
+        parent: document.getElementById('wrapper'),
+        actionMap: {
+            'a.className.choose-icon': function (target, e) {
+                onChooseFile.call();
+            }
+        }});
+</script>
+</body>
+</html>
