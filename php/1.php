@@ -1,8 +1,7 @@
 <?php
-$a =  sprintf('%u', (float) 0xFFFF);
-var_dump($a);
-
 $target = 'C:\Users\Public\Videos\Sample Videos\1.wmv';
+var_dump(md5_file($target));
+
 $string = "C:\\Python27\\python.exe " . dirname(__DIR__) . "/python/ppfeature/lixian_hash_pplive.py  " . $target;
 $descriptor_spec = array(
     0 => array("pipe", "r"),
