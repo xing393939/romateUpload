@@ -1,11 +1,11 @@
 import hashlib
 import os
-path = "C:\\Users\\Public\\Videos\\Sample Videos\\1.wmv"
+#path = "C:\\Users\\Public\\Videos\\Sample Videos\\1.wmv"
+path = "C:\\1.html"
 
 h = hashlib.sha1()
 size = os.path.getsize(path)
 print size
-print h.hexdigest()
 with open(path, 'rb') as stream:
     if size < 0xFFFF:
         h.update(stream.read())

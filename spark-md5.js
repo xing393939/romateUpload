@@ -449,6 +449,7 @@
         }
 
         this._finish(tail, length);
+        console.log('SparkMD5.prototype.end', this._hash);
         ret = hex(this._hash);
 
         if (raw) {
@@ -628,6 +629,7 @@
         }
 
         this._finish(tail, length);
+        console.log('SparkMD5.ArrayBuffer.prototype.end', this._hash);
         ret = hex(this._hash);
 
         if (raw) {
