@@ -2,79 +2,6 @@
 <html>
 <head>
     <title>SHA1 Checksum Calculator</title>
-    <style>
-        body {
-            background-color: #ADADAD;
-            font-family: sans-serif;
-            color: white;
-        }
-        a {
-            text-decoration: none;
-            font-weight: bold;
-
-            color: #EDFAFF;
-        }
-        #floater {
-            top: 40%;
-            left: 50%;
-            position: absolute;
-        }
-        #center {
-            display: inline-block;
-            color: black;
-            margin: -150px 0 0 -300px;
-            width: 600px;
-            z-index: 99;
-            padding-right: 15px;
-            padding-left: 15px;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            opacity: 1;
-            background-image: -webkit-linear-gradient(273deg, rgb(252, 252, 252), rgb(247, 247, 247) 3%, rgb(242, 242, 242) 12%, rgb(217, 217, 217) 90%, rgb(191, 191, 191));
-            background-image: -moz-linear-gradient(273deg, rgb(252, 252, 252), rgb(247, 247, 247) 3%, rgb(242, 242, 242) 12%, rgb(217, 217, 217) 90%, rgb(191, 191, 191));
-            background-attachment: initial;
-            background-origin: initial;
-            background-clip: initial;
-            background-color: initial;
-            -webkit-box-shadow: #A5A5A5 0px 0px 6px 6px;
-            -moz-box-shadow: #A5A5A5 0px 0px 6px 6px;
-            border-top-left-radius: 30px 30px;
-            border-top-right-radius: 0 0;
-            border-bottom-right-radius: 30px 30px;
-            border-bottom-left-radius: 0 0;
-            background-position: initial initial;
-            background-repeat: initial initial;
-        }
-        #value {
-            color: black;
-            margin: 0 0 0 -260px;
-            top: 230px;
-            left: 42px;
-            width: 510px;
-            padding-bottom: 10px;
-            z-index: 99;
-            padding-right: 15px;
-            padding-left: 15px;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            opacity: 1;
-            background-image: -webkit-linear-gradient(273deg, rgb(252, 252, 252), rgb(247, 247, 247) 3%, rgb(242, 242, 242) 12%, rgb(217, 217, 217) 90%, rgb(191, 191, 191));
-            background-image: -moz-linear-gradient(273deg, rgb(252, 252, 252), rgb(247, 247, 247) 3%, rgb(242, 242, 242) 12%, rgb(217, 217, 217) 90%, rgb(191, 191, 191));
-            background-attachment: initial;
-            background-origin: initial;
-            background-clip: initial;
-            background-color: initial;
-            -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 6px 6px;
-            -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 6px 6px;
-            font-family: monospace;
-            border-bottom-right-radius: 10px 10px;
-            border-bottom-left-radius: 10px 10px;
-            background-position: initial initial;
-            background-repeat: initial initial;
-            padding-top: 15px;
-            font-size: 20px;
-        }
-    </style>
 </head>
 <body>
 <script>
@@ -116,41 +43,8 @@
     }
 </script>
 <div id="floater">
-    <div id="center">
-
-        <div id="featdetect">
-            <p>
-                To begin, select <b>a file</b> (or <b>drag it here</b>).
-            </p>
-
-            <div style="float:right">
-                <span id="speed" style='padding-right:10px;'></span>
-                <span id="pct" style='font-weight:bold'></span>
-            </div>
-            <p>
-                <input type="file" onchange="selected(this.files[0])">
-            </p>
-        </div>
-        <progress id="progress" style="width:570px;margin-bottom:12px;display:none" value=0></progress>
-    </div>
-
-    <div id="value" style="display:none">
-        3da541559918a808c2402bba5012f6c60b27661c
-    </div>
+    <input type="file" onchange="selected(this.files[0])">
 </div>
-<script>
-    (function () {
-        try {
-            var fr = new FileReader();
-            if (Worker && new Uint8Array && ArrayBuffer && fr.readAsArrayBuffer) {
-            } else {
-                throw "boo";
-            }
-        } catch (err) {
-        }
-    })();
-</script>
-
 </body>
 </html>
 
