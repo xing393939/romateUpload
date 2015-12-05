@@ -94,7 +94,7 @@
         if (worker) worker.terminate();
         var size = file.size;
         var realsize = Math.ceil((size / 4 + 3) / 16) * 16 * 4;
-        worker = new Worker('ppFeature.js');
+        worker = new Worker('js-typed-array-sha1.js');
         lasttime = +new Date;
         lastprocessed = 0;
         worker.onmessage = function (e) {
