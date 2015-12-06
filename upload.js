@@ -78,7 +78,6 @@
 			} else {
 				chunk = blob.slice(start, end); 
 			}
-        console.log(start, end);
 
 			xhr.addEventListener("load",  function (evt) {
 				self.chuckIndex = index;
