@@ -1,28 +1,11 @@
 <?php
 $target = 'C:\Users\Public\Videos\Sample Videos\1.wmv';
-var_dump(md5_file($target));
-
-$string = "C:\\Python27\\python.exe " . dirname(__DIR__) . "/python/ppfeature/lixian_hash_pplive.py  " . $target;
-$descriptor_spec = array(
-    0 => array("pipe", "r"),
-    1 => array("pipe", "w"),
-    2 => array("file", "error.log", "a")
-);
-
-$process = proc_open($string, $descriptor_spec, $pipes);
-
-if (is_resource($process)) {
-
-    $output = stream_get_contents($pipes[1]);
-
-    fclose($pipes[1]);
-    fclose($pipes[0]);
-
-    $return = proc_close($process);
-    if ($return != 0) $output = "Error";
-} else $output = "Error";
-$output = str_replace(PHP_EOL, '', $output);
-$filesize = filesize($target);
-$features = $filesize . "_" . $output;
-
-var_dump($features);
+$target = 'C:\public.rar';
+$tmpArr = $_FILES['files']['tmp_name'];
+$target = 'public.rar';
+@unlink($target);
+foreach ($tmpArr as $tmp) {
+    file_put_contents($target, file_get_contents($tmp), FILE_APPEND);
+    //move_uploaded_file($tmp, basename($tmp));
+    var_dump(sha1_file($target));
+}

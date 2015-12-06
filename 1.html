@@ -31,74 +31,15 @@
     var ensureAfterDomRenderer = UTIL.ensureAfterDomRenderer;
     var removeClass = UTIL.dom.removeClass;
 
-    var str2ab_blobreader = function (str) {
-        var blob;
-        BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
-        if (typeof(BlobBuilder) !== 'undefined') {
-            var bb = new BlobBuilder();
-            bb.append(str);
-            blob = bb.getBlob();
-        } else {
-            blob = new Blob([str]);
+    var sendBase64 = function (FormData) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
         }
-        var f = new FileReader();
-        f.onload = function (e) {
-            console.log(e.target.result);
-        }
-        f.readAsArrayBuffer(blob);
+        xhr.upload.onprogress = function (evt) {
+        };
+        xhr.open("post", 'php/1.php');
+        xhr.send(FormData);
     };
-    var readBlob = function (blob) {
-        start = 0;
-        end = 2097152;
-        if (blob.webkitSlice) {
-            chunk = blob.webkitSlice(start, end);
-        } else if (blob.mozSlice) {
-            chunk = blob.mozSlice(start, end);
-        } else {
-            chunk = blob.slice(start, end);
-        }
-        if (blob.webkitSlice) {
-            var buffer = str2ab_blobreader(chunk);
-        } else {
-            console.log(chunk);
-        }
-    }
-    function calcmd5(file, callback) {
-        var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
-                chunkSize = 2097152,
-                chunks = Math.ceil(file.size / chunkSize),
-                currentChunk = 0,
-                spark = new SparkMD5.ArrayBuffer(),
-                fileReader = new FileReader();
-
-        fileReader.onload = function (e) {
-            console.log('read chunk nr', currentChunk + 1, 'of', chunks);
-            spark.append(e.target.result);
-            currentChunk++;
-
-            if (currentChunk < chunks) {
-                loadNext();
-            } else {
-                console.log('finished loading');
-                var hash = spark.end();
-                console.log(hash);
-            }
-            callback(hash);
-        };
-
-        fileReader.onerror = function () {
-            console.warn('oops, something went wrong.');
-        };
-
-        function loadNext() {
-            var start = currentChunk * chunkSize,
-                    end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize;
-
-            fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
-        }
-
-        loadNext();
-    }
 
     var _createUploadInput = function (up) {
         var fileSelector = document.createElement('input');
@@ -121,10 +62,25 @@
             var files = fileChoose.files;
             for (var i = 0, l = files.length; i < l; i++) {
                 var file = files[i];
-                //readBlob(file);
-                var hash = calcmd5(file, function (hash) {
-                    console.log(hash);
-                });
+                var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+                var start = 0;
+
+                var fd = new FormData();
+                if (file.size < 65535) {
+                    fd.append("files[]", file);
+                } else {
+                    start = 0
+                    fd.append("files[]", blobSlice.call(file, start, start + 12288));
+                    start = parseInt(1 * file.size / 5);
+                    fd.append("files[]", blobSlice.call(file, start, start + 12288));
+                    start = parseInt(2 * file.size / 5);
+                    fd.append("files[]", blobSlice.call(file, start, start + 12288));
+                    start = parseInt(3 * file.size / 5);
+                    fd.append("files[]", blobSlice.call(file, start, start + 12288));
+                    start = file.size - 12288;
+                    fd.append("files[]", blobSlice.call(file, start, start + 12288));
+                }
+                sendBase64(fd);
             }
         }
     };
