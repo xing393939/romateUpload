@@ -12,7 +12,7 @@ while ($data) {
     $i ++;
 
     echo sha1($data), '<br>';
-    file_put_contents($target, sha1($data), FILE_APPEND);
+    file_put_contents($target, sha1($data, TRUE), FILE_APPEND);
     $data = fread($fp, 0x40000);
 }
 fclose($fp);
