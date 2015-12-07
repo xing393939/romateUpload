@@ -1,16 +1,20 @@
 <?php
 $file_size = filesize('1.wmv');
+$target = dirname(__DIR__) . '/uploads/gcid.rar';
+@unlink($target);
 $fp = fopen('1.wmv', 'r');
-$input = fread($fp, 0x40000);
-fclose($fp);
+$data = fread($fp, 0x40000);
+//$num = file_put_contents($target, $input);
 
-$target = dirname(__DIR__) . '/uploads/tmp.rar';
-$num = file_put_contents($target, $input);
+$i = 1;
+while ($data) {
+    fseek($fp, 0x40000 * $i);
+    $i ++;
 
-$sha1 = sha1_file($target);
-for ($i = 1; $i <= ceil($file_size / 0x40000); $i ++) {
-    echo $sha1, '<br>';
-    $sha1 = sha1($sha1);
+    echo sha1($data), '<br>';
+    file_put_contents($target, sha1($data), FILE_APPEND);
+    $data = fread($fp, 0x40000);
 }
-echo $sha1, '<br>';
+fclose($fp);
+echo sha1_file($target);
 ?>
